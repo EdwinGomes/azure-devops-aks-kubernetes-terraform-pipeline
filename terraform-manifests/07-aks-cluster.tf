@@ -11,8 +11,8 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     name       = "systempool"
     vm_size    = "Standard_DS2_v2"
     orchestrator_version = data.azurerm_kubernetes_service_versions.current.latest_version
-    availability_zones   = [1, 2, 3]
-    enable_auto_scaling  = true
+    zones   = [1, 2, 3]
+    auto_scaling_enabled  = true
     max_count            = 3
     min_count            = 1
     os_disk_size_gb      = 30
@@ -35,6 +35,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   identity { type = "SystemAssigned" }
 
 # Add On Profiles
+  /*
   addon_profile {
     azure_policy { enabled = true }
     oms_agent {
@@ -42,8 +43,15 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
       log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
     }
   }
+  */
+  azure_policy_enabled = true
+
+  oms_agent {
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.insights.id
+  }
 
 # RBAC and Azure AD Integration Block
+/*
 role_based_access_control {
   enabled = true
   azure_active_directory {
@@ -51,6 +59,12 @@ role_based_access_control {
     admin_group_object_ids = [azuread_group.aks_administrators.id]
   }
 }  
+*/
+
+azure_active_directory_role_based_access_control {
+  azure_rbac_enabled = true
+  admin_group_object_ids = [azuread_group.aks_administrators.id]
+}
 
 # Windows Admin Profile
 windows_profile {
