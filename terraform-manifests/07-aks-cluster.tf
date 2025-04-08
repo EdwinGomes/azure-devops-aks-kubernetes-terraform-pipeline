@@ -83,7 +83,7 @@ linux_profile {
 # Network Profile
 network_profile {
   load_balancer_sku = "standard"
-  network_plugin = "overlay"
+  network_plugin = "azure"
   pod_cidr = "10.244.0.0/16"
 }
 
