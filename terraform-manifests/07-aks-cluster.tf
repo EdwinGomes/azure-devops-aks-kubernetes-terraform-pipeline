@@ -84,6 +84,7 @@ linux_profile {
 network_profile {
   load_balancer_sku = "standard"
   network_plugin = "overlay"
+  pod_cidr = "10.244.0.0/16"
 }
 
 # AKS Cluster Tags 
